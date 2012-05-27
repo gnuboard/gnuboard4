@@ -425,9 +425,9 @@ function bad120422($matches)
 {
     $tag  = $matches[1];
     $code = $matches[2];
-    if (preg_match("#script#i", $code)) {
+    if (preg_match("#\bscript\b#i", $code)) {
         return "$tag 태그에 스크립트는 사용 불가합니다.";
-    } else if (preg_match("#base64#i", $code)) {
+    } else if (preg_match("#\bbase64\b#i", $code)) {
         return "$tag 태그에 BASE64는 사용 불가합니다.";
     }
     return $matches[0];
