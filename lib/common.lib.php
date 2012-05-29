@@ -528,7 +528,11 @@ function get_sql_search($search_ca_name, $search_field, $search_text, $search_op
     $search_text = trim(stripslashes($search_text));
 
     if (!$search_text) {
-        return '0';
+        if ($search_ca_name) {
+            return $str;
+        } else {
+            return '0';
+        }
     }
 
     if ($str)
