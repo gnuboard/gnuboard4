@@ -1,17 +1,6 @@
 <?
 include_once ("../config.php");
-
-// 파일이 존재한다면 설치할 수 없다.
-if (file_exists("../dbconfig.php")) {
-    echo "<meta http-equiv='content-type' content='text/html; charset=$g4[charset]'>";
-    echo <<<HEREDOC
-    <script language="JavaScript">
-    alert("설치하실 수 없습니다.");
-    location.href="../";
-    </script>
-HEREDOC;
-    exit;
-}
+include_once ("./install.inc.php");
 
 $gmnow = gmdate("D, d M Y H:i:s") . " GMT";
 header("Expires: 0"); // rfc2616 - Section 14.21
