@@ -2,7 +2,18 @@
 set_time_limit(0);
 
 include_once ("../config.php");
-include_once ("./install.inc.php");
+
+// 파일이 존재한다면 설치할 수 없다.
+if (file_exists("../dbconfig.php")) {
+    echo "<meta http-equiv='content-type' content='text/html; charset=$g4[charset]'>";
+    echo <<<HEREDOC
+    <script language="JavaScript">
+    alert("설치하실 수 없습니다.");
+    location.href="../";
+    </script>
+HEREDOC;
+    exit;
+}
 
 $gmnow = gmdate("D, d M Y H:i:s") . " GMT";
 header("Expires: 0"); // rfc2616 - Section 14.21
@@ -257,10 +268,12 @@ flush(); usleep(50000);
 //-------------------------------------------------------------------------------------------------
 
 // DB 설정 파일 생성
-$file = "../data/dbconfig.php";
+$file = "../dbconfig.php";
 $f = @fopen($file, "w");
 
 fwrite($f, "<?\n");
+//fwrite($f, "if (!preg_match('/^'.str_replace('/', '\/', dirname(__FILE__)).'/', \$_SERVER['SCRIPT_FILENAME'])) die('정상적인 접근이 아님.');\n");
+//fwrite($f, "if (\$dbconfig_file != str_replace(\$dirname, '', __FILE__)) die('정상적인 접근이 아님');\n");
 fwrite($f, "\$mysql_host = '$mysql_host';\n");
 fwrite($f, "\$mysql_user = '$mysql_user';\n");
 fwrite($f, "\$mysql_password = '$mysql_pass';\n");
@@ -271,12 +284,25 @@ fclose($f);
 @chmod($file, 0606);
 echo "<script>document.frminstall2.job3.value='DB설정 파일 생성 완료';</script>";
 
+/*
+$str = implode("", file("../common.php"));
+$str = str_replace("__MYSQL_HOST__", $mysql_host, $str);
+$str = str_replace("__MYSQL_USER__", $mysql_user, $str);
+$str = str_replace("__MYSQL_PASS__", $mysql_pass, $str);
+$str = str_replace("__MYSQL_DB__",   $mysql_db,   $str);
+$f = fopen("../common.php", "w");
+fputs($f, $str);
+fclose($f);
+echo "<script>document.frminstall2.job3.value='DB설정값 변환 완료';</script>";
+*/
+
 flush(); usleep(50000); 
 
 
 // 1.00.09 - data/log 삽입
 // 디렉토리 생성
-$dir_arr = array ("../data",
+$dir_arr = array ("../extend",
+                  "../data",
                   "../data/file",
                   "../data/log",
                   "../data/member",
@@ -287,6 +313,15 @@ for ($i=0; $i<count($dir_arr); $i++)
 {
     @mkdir($dir_arr[$i], 0707);
     @chmod($dir_arr[$i], 0707);
+
+    /*
+    // 디렉토리에 있는 파일의 목록을 보이지 않게 한다.
+    $file = $dir_arr[$i] . "/index.php";
+    $f = @fopen($file, "w");
+    @fwrite($f, "");
+    @fclose($f);
+    @chmod($file, 0606);
+    */
 }
 
 // data 디렉토리 및 하위 디렉토리에서는 .htaccess .htpasswd .php .phtml .html .htm .inc .cgi .pl 파일을 실행할수 없게함.
@@ -300,7 +335,7 @@ EOD;
 fwrite($f, $str);
 fclose($f);
 
-//@rename("../install", "../install.bak");
+@rename("../install", "../install.bak");
 //-------------------------------------------------------------------------------------------------
 
 echo "<script language='JavaScript'>document.frminstall2.status_bar.value += '■';</script>\n";

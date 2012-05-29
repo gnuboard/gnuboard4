@@ -88,6 +88,4 @@ $g4['https_url'] = "";
 // 입력예
 //$g4['url'] = "http://www.sir.co.kr";
 //$g4['https_url'] = "https://www.sir.co.kr";
-
-$g4['dbconfig'] = "data/dbconfig.php";
 ?>

@@ -1,6 +1,95 @@
 <?
 include_once ("../config.php");
-include_once ("./install.inc.php");
+
+// 퍼미션을 다음과 같은 형식으로 얻는다. drwxrwxrwx
+function get_perms($mode)
+{
+    /* Determine Type */
+    if( $mode & 0x1000 )
+        $perms["type"] = 'p'; /* FIFO pipe */
+    else if( $mode & 0x2000 )
+        $perms["type"] = 'c'; /* Character special */
+    else if( $mode & 0x4000 )
+        $perms["type"] = 'd'; /* Directory */
+    else if( $mode & 0x6000 )
+        $perms["type"] = 'b'; /* Block special */
+    else if( $mode & 0x8000 )
+        $perms["type"] = '-'; /* Regular */
+    else if( $mode & 0xA000 )
+        $perms["type"] = 'l'; /* Symbolic Link */
+    else if( $mode & 0xC000 )
+        $perms["type"] = 's'; /* Socket */
+    else
+        $perms["type"] = 'u'; /* UNKNOWN */
+
+    /* Determine permissions */
+    $perms["owner_read"]    = ($mode & 00400) ? 'r' : '-';
+    $perms["owner_write"]   = ($mode & 00200) ? 'w' : '-';
+    $perms["owner_execute"] = ($mode & 00100) ? 'x' : '-';
+    $perms["group_read"]    = ($mode & 00040) ? 'r' : '-';
+    $perms["group_write"]   = ($mode & 00020) ? 'w' : '-';
+    $perms["group_execute"] = ($mode & 00010) ? 'x' : '-';
+    $perms["world_read"]    = ($mode & 00004) ? 'r' : '-';
+    $perms["world_write"]   = ($mode & 00002) ? 'w' : '-';
+    $perms["world_execute"] = ($mode & 00001) ? 'x' : '-';
+
+    /* Adjust for SUID, SGID and sticky bit */
+    if( $mode & 0x800 )
+        $perms["owner_execute"] = ($perms["owner_execute"]=='x') ? 's' : 'S';
+    if( $mode & 0x400 )
+        $perms["group_execute"] = ($perms["group_execute"]=='x') ? 's' : 'S';
+    if( $mode & 0x200 )
+        $perms["world_execute"] = ($perms["world_execute"]=='x') ? 't' : 'T';
+
+    return $perms;
+}
+
+// 파일이 존재한다면 설치할 수 없다.
+if (file_exists("../dbconfig.php")) {
+    echo "<meta http-equiv='content-type' content='text/html; charset=$g4[charset]'>";    
+    echo <<<HEREDOC
+    <script language="JavaScript">
+    alert("설치하실 수 없습니다.");
+    location.href="../";
+    </script>
+HEREDOC;
+    exit;
+}
+
+
+/*
+// 루트 디렉토리에 파일, 디렉토리 생성 가능한지 검사.
+$perms = get_perms(fileperms("../"));
+if ($perms["world_read"].$perms["world_write"].$perms["world_execute"] != "rwx") {
+    echo <<<HEREDOC
+    <script language="JavaScript">
+    alert("루트 디렉토리의 퍼미션을 707로 변경하여 주십시오.\\n\\ncommon.php 파일이 있는곳이 루트 디렉토리 입니다.\\n\\n$> chmod 707 . \\n\\n그 다음 설치하여 주십시오.");
+    </script>
+HEREDOC;
+    exit;
+}
+*/
+
+// 루트 디렉토리에 파일 생성 가능한지 검사.
+if (!is_writeable("..")) 
+{
+    echo "<meta http-equiv='content-type' content='text/html; charset=$g4[charset]'>";
+    echo "<script language='JavaScript'>alert('루트 디렉토리의 퍼미션을 707로 변경하여 주십시오.\\n\\ncommon.php 파일이 있는곳이 루트 디렉토리 입니다.\\n\\n$> chmod 707 . \\n\\n그 다음 설치하여 주십시오.');</script>"; 
+    exit;
+}
+
+
+/*
+$perms = get_perms(fileperms("../common.php"));
+if ($perms["world_read"].$perms["world_write"] != "rw") {
+    echo <<<HEREDOC
+    <script language="JavaScript">
+    alert("루트 디렉토리에 있는 common.php 파일의 퍼미션을 606 또는 707로 변경하여 주십시오.\\n\\n$> chmod 606 common.php \\n\\n그 다음 설치하여 주십시오.");
+    </script>
+HEREDOC;
+    exit;
+}
+*/
 ?>
 <html>
 <head>
