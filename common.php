@@ -226,6 +226,8 @@ include_once("$g4[path]/lib/constant.php");  // 상수 정의
 include_once("$g4[path]/config.php");  // 설정 파일
 include_once("$g4[path]/lib/common.lib.php"); // 공통 라이브러리
 
+header("Content-Type: text/html; charset={$g4['charset']}"); 
+
 // config.php 가 있는곳의 웹경로
 if (!$g4['url'])
 {
