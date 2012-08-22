@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
 // Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var oEditor = null;
 var button = [ { alt : "", img : 'submit.gif', cmd : doSubmit },              
@@ -29,7 +27,7 @@ function init(dialog) {
   	var rng = oEditor.range;
   	var selectionType = oEditor.getSelectionType(rng);
 
-  	if (window.getSelection) {
+  	if (!oEditor.getBrowser().msie) {
   		var table = rng.startContainer;
   		if (selectionType == 3 && table.nodeName != 'TABLE' && table.nodeName != 'TD') {
   			isError();
@@ -185,7 +183,7 @@ function getColor()
 function doSubmit()
 {
     var border  = parseInt(document.getElementById("bordersize").value);
-    if (isNaN(border)) border = null;
+    if (isNaN(border)) border = 0;
     modifyTable.removeAttribute('border');
     if (border) modifyTable.setAttribute('border', border);
     

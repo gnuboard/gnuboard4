@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
 // Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var button = [
 	{ alt : "", img : 'play.gif', cmd : doPlay },              
@@ -26,9 +24,7 @@ function init(dialog) {
 
 function doPlay()
 {
-    //document.getElementById('fm_player').innerHTML = document.getElementById("fm_embed").value;
     var elem = oEditor.trimSpace(document.getElementById("fm_embed").value);
-
     var embed = null;
 	var div = document.createElement('DIV');
 		

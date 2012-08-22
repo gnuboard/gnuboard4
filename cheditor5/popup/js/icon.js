@@ -3,7 +3,7 @@
 // ----------------------------------------------------------------
 // Author: Na Chang-Ho (chna@chcode.com)
 // Homepage: http://www.chcode.com
-// Copyright (c) 1997-2009 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var oEditor = null;
 var button = [ { alt : "", img : 'cancel.gif', cmd : popupClose } ];
@@ -12,17 +12,17 @@ function init(dialog) {
 	oEditor = this;
 	oEditor.dialog = dialog;
 	
-	var dlg = new Dialog(oEditor);
-	
+	var dlg = new Dialog(oEditor);	
 	showContents();
 	dlg.showButton(button);
 	dlg.setDialogHeight();
 }
 
-function insertIcon()
-{
+function insertIcon() {
+	this.removeAttribute("className");
 	this.removeAttribute("class");
-  	oEditor.insertHtmlPopup(this.cloneNode(true));
+	this.style.margin = '1px 4px';
+  	oEditor.insertHtmlPopup(this.cloneNode(false));
   	popupClose();
 }
 
@@ -31,24 +31,25 @@ function popupClose() {
 }
 
 function showContents() {
-	var num = 40;
 	var block = document.getElementById('imgBlock');
-	var folder = oEditor.config.iconPath + 'em/';
-	for (var i=0; i<num; i++) {
-		if (i == 10 || i == 20 || i == 30) {
+	var path = oEditor.config.iconPath + 'em/';
+	var num = 80;
+	
+	for (var i=40; i<num; i++) {
+		if (i > 40 && (i % 10) == 0) {
 			var br = document.createElement('br');
 			block.appendChild(br);
 		}
 		
 		var img = new Image();
-		img.src = folder + (i+1) + ".gif";
-		img.style.width = '19px';
-		img.style.height = '19px';
-		img.style.margin = '5px';
+		img.src = path + (i+1) + ".gif";
+		img.style.width = '16px';
+		img.style.height = '16px';
+		img.style.margin = '5px 4px';
 		img.style.verticalAlign = 'middle';
+		img.setAttribute('alt', '');
 		img.setAttribute('border', 0);
 		img.className = 'handCursor';
-		img.alt = "";
 		img.onclick = insertIcon;
 		block.appendChild(img);
 	}

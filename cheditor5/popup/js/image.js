@@ -10,48 +10,39 @@ if (navigator.userAgent.indexOf('Opera') >= 0)
 
 var MSIE = navigator.userAgent.indexOf('MSIE') >= 0;
 var navigatorVersion = navigator.appVersion.replace(/.*?MSIE (\d\.\d).*/g,'$1')/1;
-	
 var UploadScript = "";
 var DeleteScript = "";
-
 var AppID = "CHXImage";
 var AppSRC = "";
-
 var activeImage = false;
 var readyToMove = false;
 var moveTimer = -1;
 var dragDropDiv;
 var insertionMarker;
 var hideTimer = null;
-
 var offsetX_marker = 4;
 var offsetY_marker = -3;
-	
-var firefoxOffsetX_marker = -5;
-var firefoxOffsetY_marker = -3;
+var firefoxOffsetX_marker = 4;
+var firefoxOffsetY_marker = -2;
 	
 if (navigatorVersion == 8 && MSIE) {
-	offsetX_marker = -6;
+	offsetX_marker = 3;
 	offsetY_marker = -4;	
 }
 	
 var destinationObject = false;
-	
-var divXPositions = new Array();
-var divYPositions = new Array();
-var divWidth = new Array();
-var divHeight = new Array();
-		
+var divXPositions = [];
+var divYPositions = [];
+var divWidth = [];
+var divHeight = [];
 var tmpLeft = 0;
 var tmpTop = 0;
-	
 var eventDiff_x = 0;
 var eventDiff_y = 0;
-		
-var modifyImages = new Array();
+var modifyImages = [];
 var uploadMaxNumber = 12;
 var imageCompleted = 0;
-var imageCompletedList = new Array();
+var imageCompletedList = [];
 var UploadButton = "";
 var UploadImagePath = "";
 var oEditor = null;
@@ -153,11 +144,8 @@ function showContents() {
 
 function openFiles() {
 // ----------------------------------------------------------------------------------
-	if (navigator.appName.indexOf("Microsoft") != -1) {
-        window[AppID].AddFiles();
-	}
-    else
-        document[AppID].AddFiles();
+	var elem = MSIE ? document.getElementById(AppID) : document[AppID];
+	elem.AddFiles();
 }
 
 function setImageCount() {
@@ -184,9 +172,8 @@ function showDelete(event) {
 	var T = divYPositions[self.parentNode.id];
 
 	self.className = 'imageBox_theImage_over';
-	button.style.left = L + (MSIE ? 102 : 96) + 'px';
-	button.style.top = T + (MSIE ? 3 : 4) + 'px';
-	var theEv = event ? event : window.event;
+	button.style.left = (L + 126) + 'px';
+	button.style.top = (T - 7) + 'px';
 	button.style.display = 'block';
 	button.onmouseover = function() {
 		self.className = 'imageBox_theImage_over';
@@ -237,7 +224,6 @@ function resetSelectedImageSize() {
 function startUpload(count) {
 // ----------------------------------------------------------------------------------
 	var el = document.getElementById('imageListWrapper').getElementsByTagName('DIV');
-	var uploadImg = 0;
 
 	for (var i=0; i < el.length; i++) {
 		var imgBox = el[i];
@@ -253,13 +239,14 @@ function startUpload(count) {
 	}
 }
 
-function fileFilterError(selectedFile) {
-	alert("선택하신 '" + selectedFile + "' 파일은 전송할 수 없습니다.\n" +
+function fileFilterError(file) {
+	alert("선택하신 '" + file + "' 파일은 전송할 수 없습니다.\n" +
 		  "gif, png, jpg, 그림 파일만 전송할 수 있습니다.");
 }
 
 function uploadComplete(fileData) {
 // ----------------------------------------------------------------------------------
+	fileData = fileData.replace(/^\s+/g, '').replace(/\s+$/g, '');
 	if (/^-ERR/.test(fileData)) {
 		alert(fileData);
 		popupClose();
@@ -274,7 +261,6 @@ function uploadComplete(fileData) {
 		return;
 
 	var el = document.getElementById('imageListWrapper').getElementsByTagName('DIV');
-	var uploadImg = 0;
 
 	for (var i=0; i < el.length; i++) {
 		var imgBox = el[i];
@@ -349,9 +335,10 @@ function imgComplete(img, boxId, dataObj) {
 			img.style.marginTop = Math.round(M/2) + 'px';
 		}
 
-		document.getElementById(boxId).style.backgroundImage = "url('"+UploadImagePath+"/background_image.gif')";
-		document.getElementById(boxId).onmouseover = showDelete;
-		document.getElementById(boxId).onmouseout = function() {
+		var elem = document.getElementById(boxId);
+		elem.style.backgroundImage = "url('"+oEditor.config.iconPath+"dot.gif')";
+		elem.onmouseover = showDelete;
+		elem.onmouseout = function() {
 				this.className = 'imageBox_theImage';
 				resetSelectedImageSize();
 		};
@@ -389,7 +376,6 @@ function showUploadWindow() {
 // ----------------------------------------------------------------------------------
   	var uploadWindow  = document.getElementById("uploadWindow");
   	var uploadWindowWidth  = 700;
-  	var winHeight = 0;
   	var winWidth  = 0;
   
   	if (typeof(window.innerWidth) != 'undefined') {
@@ -457,7 +443,7 @@ function closeWindow() {
 
 function removeImage() {
 // ----------------------------------------------------------------------------------
-	var images = new Array();
+	var images = [];
 
 	for (var i=0; i < uploadMaxNumber; i++) {
 		var theImage = document.getElementById('img_'+i);
@@ -574,7 +560,7 @@ function reOrder() {
 	var wrapper = document.getElementById('imageListWrapper');
 	var imgBox = wrapper.getElementsByTagName('DIV');
 	var imgNum = 0;
-	var breakLine = new Array();
+	var breakLine = [];
 	var uploadImg = 0;
 
 	for (var i=0; i < imgBox.length; i++) {
@@ -648,9 +634,11 @@ function dragDropEnd() {
 		activeImage = false;
 		destinationObject = false;
 		getDivCoordinates();
+
+		return false;
 	}
 
-	return false;
+	return true;
 }
 	
 function dragDropMove(e) {
@@ -727,7 +715,7 @@ function getDivCoordinates() {
 	
 function saveImageOrder() {
 // ----------------------------------------------------------------------------------
-	var rData = new Array();
+	var rData = [];
 	var objects = document.getElementById('imageListWrapper').getElementsByTagName('DIV');
 
 	for (var i=0; i < objects.length; i++) {
@@ -750,15 +738,11 @@ function initGallery() {
 		}
 	}
 	
-	var insObj = document.getElementById('insertionMarker');
-	var images = insObj.getElementsByTagName('IMG');
 	document.body.onselectstart = cancelEvent;
 	document.body.ondragstart = cancelEvent;
 	document.body.onmouseup = dragDropEnd;
 	document.body.onmousemove = dragDropMove;
 
-	//window.onresize = getDivCoordinates;
-		
 	dragDropDiv = document.getElementById('dragDropContent');
 	insertionMarker = document.getElementById('insertionMarker');
 	getDivCoordinates();
@@ -809,7 +793,7 @@ function handle_response (http_request) {
 function doSubmit() {
 // ----------------------------------------------------------------------------------
 	var el = document.getElementById('imageListWrapper').getElementsByTagName('DIV');
-	var imageArray = new Array();
+	var imageArray = [];
 	var num = 0;
 	var fm_align = document.getElementById('fm_alignment').alignment;
 	var img_align = 'top';

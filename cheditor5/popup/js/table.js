@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
 // Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var oEditor = null;
 var button = [ { alt : "", img : 'submit.gif', cmd : doSubmit },              
@@ -83,7 +81,7 @@ function doSubmit()
     
     var border  = parseInt(document.getElementById("bordersize").value);
     if (isNaN(border))
-    	border = null;
+    	border = 0;
     
     var width = document.getElementById("width").value;
     if (document.getElementById("widthtype").value == 'none')
@@ -133,25 +131,25 @@ function doSubmit()
         if (width) 	table.setAttribute("width", width);
         if (height) table.setAttribute("height", height);
         if (align) table.setAttribute("align", align);
+        
+        table.style.borderStyle = 'solid';
         table.setAttribute("cellpadding", cellpd);
         table.setAttribute("cellspacing", cellsp);
-        
         table.style.borderCollapse = "collapse";
 
         if (bgcolor) table.setAttribute("bgcolor", bgcolor);
         if (bordercolor) table.setAttribute("bordercolor", bordercolor);
 
-        var ie = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
-        var tdWidth = (cols > 1) ? parseInt(100 / cols) : null; 
+        //var ie = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
+        //var tdWidth = (cols > 1) ? parseInt(100 / cols) : null; 
 
         for (var i=0; i < rows; i++) {
             var tr = table.insertRow(i);
             for (var j=0; j < cols; j++) {
                 var td = tr.insertCell(j);
-                if (tdWidth)
-                	td.setAttribute("width", tdWidth + "%");
-                if (!ie)
-                	td.appendChild(document.createElement("br"));
+                /*if (tdWidth)
+                	td.setAttribute("width", tdWidth + "%");*/
+                td.innerHTML = '&nbsp;';
                 tr.appendChild(td);
             }
         }

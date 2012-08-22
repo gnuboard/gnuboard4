@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
 // Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var oEditor = null;
 var button = [	{ alt : "", img : 'submit.gif', cmd : returnSelected },              
@@ -14,12 +12,17 @@ function init(dialog) {
 	oEditor = this;
 	oEditor.dialog = dialog;
 	
-	document.getElementById('fm_link_value').value = 'http://';
+	resetValues();
 	getSelected();
 	
 	var dlg = new Dialog(oEditor);
 	dlg.showButton(button);
 	dlg.setDialogHeight();
+}
+
+function resetValues() {
+	document.getElementById('fm_link_value').value = 'http://';
+	document.getElementById("fm_title").value = '';
 }
 
 function popupClose() {
@@ -31,7 +34,7 @@ function UpdateProtocol()
   	var protocolSel 		= document.getElementById("fm_protocol");
   	var selectedItem        = protocolSel.selectedIndex;
   	var selectedItemValue   = protocolSel.options[selectedItem].value;
-  	var selectedItemText    = protocolSel.options[selectedItem].text;
+  	//var selectedItemText    = protocolSel.options[selectedItem].text;
   	var inputtedText        = document.getElementById("fm_link_value").value;
 	var datum;
   	var protocol = inputtedText.split(":");
@@ -82,21 +85,18 @@ function returnSelected()
 
 function getSelected() {
   	var rng = oEditor.range;
-  	var selectionType = oEditor.getSelectionType(rng);
   	var link = null;
-  
-  	if (selectionType == "Text" || selectionType == "None") {
-    	link = rng.parentElement();
-  	}
-  	else if (selectionType == "Control") {
-    	link = rng.item(0).parentNode;
-  	}
-  	else {
-    	return;
-  	}
 
-    if (link.nodeName != "A") return;
-    
+	if (window.getSelection) {
+        link = oEditor.getElement(rng.startContainer, "A");
+	}
+	else {
+		link = rng.parentElement ? oEditor.getElement(rng.parentElement(), "A") : oEditor.getElement(rng.item(0), "A");
+	}
+	
+  	if (link == null || link.nodeName.toLowerCase() != 'a')
+  		return;
+	
     var protocol = link.href.split(":");
     
     if (protocol[0]) {

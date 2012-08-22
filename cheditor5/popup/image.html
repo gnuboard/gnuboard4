@@ -13,14 +13,14 @@
 	<body scroll="no">
 		<div id="uploadWindow">
  			<div id="container">
-				<div style="float:left;margin-top:4px;font-size:8pt;font-family:dottum;color:#666">
+				<div style="float:left;margin-top:4px;font-size:9pt;font-family:gulim,tahoma;color:#666">
 					<img src="../icons/imageUpload/mouse_drag_img.gif" width="19" height="16" alt="" style="vertical-align:middle" />
 					마우스로 드래그하여 순서를 바꾸세요.&nbsp;&nbsp;&nbsp;(<b><span id="imageCount">0</span></b>장 / 12장 사진)
 				</div>
 				<div style="float:right;margin:0px 0px 7px 0px">
 					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
-						<td id="oFlash"></td>
+							<td id="oFlash"></td>
 							<td><img src="../icons/imageUpload/remove_all.gif" class="button" style="margin-left:3px;vertical-align:middle" onclick="removeImage()" alt="" /></td>
 						</tr>
 					</table>
@@ -30,7 +30,7 @@
 				<div id="imageInfoBox">
 					<div style="border-bottom:1px #ddd solid;padding:5px 5px 10px 5px">
 						<div style="text-align:center;">
-							<span style="font-weight:bold;font-size:9pt">이미지 크기</span>
+							<span style="font-weight:bold;font-size:9pt">사진 해상도</span>
 						</div>
 						<div style="text-align:left;font-size:9pt;margin-top:10px;line-height:1.4em">
 							<span>가로: </span><span style="color:#ff6600" id="selectedImageWidth">0</span> 픽셀<br />
@@ -46,11 +46,11 @@
 							<tr>
 								<td align="center">
 									<img src="../icons/image_align_left.png" /><br />
-									<input type="radio" name="alignment" value="left" checked="checked" />
+									<input type="radio" name="alignment" value="left" />
 								</td>
 								<td align="center">
 									<img src="../icons/image_align_center.png" hspace="5" /><br />
-									<input type="radio" name="alignment" value="center" />
+									<input type="radio" name="alignment" value="center" checked="checked" />
 								</td>
 								<td align="center">
 									<img src="../icons/image_align_right.png" /><br />
@@ -60,7 +60,7 @@
 						</table>
 						</form>
 						<div style="text-align:center;margin-top:5px">
-							<span style="font-size:8pt;font-family:돋움;color:#666">(전체 사진에 적용)</span>
+							<span style="font-size:8pt;font-family:dotum,tahoma;color:#666">(전체 사진에 적용됨)</span>
 						</div>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
  			<div style="text-align:center;margin-top:10px" id="buttonWrapper"></div>
 		</div>
 		<div id="dragDropContent"></div>
-		<div id="removeImage"><img src="../icons/imageUpload/delete.gif" width="28" height="16" alt="" /></div>
+		<div id="removeImage"><img src="../icons/imageUpload/delete.png" width="16" height="16" alt="" /></div>
 		<div id="insertionMarker"></div>
 	</body>
 </html>

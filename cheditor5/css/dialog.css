@@ -4,6 +4,7 @@ body {
     border: 0px;
     padding: 10px;
     font-size: 9pt;
+    font-family: gulim,tahoma,helvetica;
 }
 
 td, input, select {

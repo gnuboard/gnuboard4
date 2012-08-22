@@ -7,9 +7,9 @@ var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
 
 function ControlVersion()
 {
-	var version;
+	var version = 0;
 	var axo;
-	var e;
+//	var e;
 
 	// NOTE : new ActiveXObject(strFoo) throws an exception if strFoo isn't in the registry
 
@@ -104,7 +104,7 @@ function GetSwfVer(){
 			} else if (versionRevision[0] == "b") {
 				versionRevision = versionRevision.substring(1);
 			}
-			var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+			flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
 		}
 	}
 	// MSN/WebTV 2.6 supports Flash 4
@@ -163,25 +163,25 @@ function AC_AddExtension(src, ext)
 
 function AC_Generateobj(objAttrs, params, embedAttrs) 
 { 
-    var str = '';
     if (isIE && isWin && !isOpera)
     {
-  		str += '<object ';
+  		var str = '<object ';
   		for (var i in objAttrs)
   			str += i + '="' + objAttrs[i] + '" ';
   		str += '>';
   		for (var i in params)
   			str += '<param name="' + i + '" value="' + params[i] + '" /> ';
   		str += '</object>';
-    } else {
-  		str += '<embed ';
-  		for (var i in embedAttrs)
-  			str += i + '="' + embedAttrs[i] + '" ';
-  		str += '> </embed>';
-    }
-
 		document.getElementById("oFlash").innerHTML = str;
-    //document.write(str);
+    }
+	else {
+		var oFlash = document.getElementById("oFlash");
+		var embed = document.createElement('embed');
+  		for (var i in embedAttrs) {
+			embed.setAttribute(i, embedAttrs[i]);
+		}
+		oFlash.appendChild(embed);
+    }
 }
 
 function CHXImageRUN(){

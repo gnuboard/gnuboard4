@@ -13,9 +13,9 @@ function errMaxFileSize (MaxFileSize) {
 
 function ControlVersion()
 {
-	var version;
+	var version = 0;
 	var axo;
-	var e;
+//	var e;
 	try {
 		axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
 		version = axo.GetVariable("$version");
@@ -77,7 +77,7 @@ function GetSwfVer(){
 				tempArrayMinor = descArray[4].split("r");
 			}
 			var versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-			var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+			flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
 		}
 	}
 	else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;

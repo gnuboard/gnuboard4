@@ -8,12 +8,13 @@
 
 #container {
 	padding: 8px;
+    font-family: gulim,tahoma,helvetica;
 }
 
 #imageListWrapper {
 	background-color: #fff;
 	border:1px #c5c5cc solid;
-	float: left;
+	position: absolute;
 }
 #imageInfoBox {
 	padding: 7px;

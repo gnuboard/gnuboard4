@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
 // Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var AppWidth = "250";
 var AppHeight = "175";
@@ -12,11 +10,13 @@ var AppID = "cheditorPreview";
 var oEditor = null;
 var button = [ { alt : "", img : 'submit.gif', cmd : doSubmit },
                { alt : "", img : 'cancel.gif', cmd : popupClose } ];
-var imageArray = new Array();
+var imageArray = null;
 
 function init(dialog) {
 	oEditor = this;
 	oEditor.dialog = dialog;
+	
+	imageArray = new Array();
 	
 	var dlg = new Dialog(oEditor);
 	dlg.showButton(button);
@@ -29,7 +29,7 @@ function init(dialog) {
 
 function showPreviewButton() {
 	var img = new Image();
-	img.src = oEditor.config.iconPath + '/button/preview.gif';
+	img.src = oEditor.config.iconPath + 'button/preview.gif';
 	img.style.verticalAlign = 'middle';
 	img.className = 'button';
 	img.alt = "";
@@ -74,6 +74,19 @@ function doSubmit ()
   	if (navigator.userAgent.toLowerCase().indexOf("msie")  != -1)
     	document.getElementById(AppID).style.display = 'none';
 
+   	var fm_align = document.getElementById('fm_align').alignment;
+    var align = '';
+	var i = 0;
+
+    for (; i<fm_align.length; i++) {
+        if (fm_align[i].checked) {
+            align = fm_align[i].value;
+        	break;
+    	}
+	}
+
+	imageArray[0]['align'] = align;
+
   	oEditor.doInsertImage(imageArray);
 	popupClose();
 }
@@ -95,32 +108,13 @@ function checkImageComplete (img) {
     	var txt = document.createTextNode(img.width + ' X ' + img.height);
     	document.getElementById('imageSize').innerHTML = '';
     	document.getElementById('imageSize').appendChild(txt);
-    	var fm_align = document.getElementById('fm_align').alignment;
-	    var align = 'top';
-	    var braz = false;
+
 		var i = 0;
-
-	    for (; i<fm_align.length; i++) {
-	        if (fm_align[i].checked) {
-	            align = fm_align[i].value;
-	            if (align == 'break') braz = true;
-	        	break;
-	    	}
-		}
-
-		i = 0;
 		imageArray[i] = new Object();
        	imageArray[i]['width'] = img.width;
        	imageArray[i]['height'] = img.height;
 		imageArray[i]['src'] = img.src;
-
-		if (braz) {
-			imageArray[i]['alt'] = align;
-		}
-		else {
-			imageArray[i]['align'] = align;
-			imageArray[i]['alt'] = '';
-		}
+		imageArray[i]['alt'] = img.src;
   	}
 }
 

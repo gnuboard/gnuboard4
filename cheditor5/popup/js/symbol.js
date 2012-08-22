@@ -1,10 +1,8 @@
 // ================================================================
-//                       CHEditor 5.0
+//                       CHEditor 5
 // ----------------------------------------------------------------
-// Author: Na Chang Ho
-// Homepage: http://www.chcode.com
-// EMail: support@chcode.com
-// Copyright (c) 1997-2010 CHSOFT
+// Homepage: http://www.chcode.com 한국어
+// Copyright (c) 1997-2011 CHSOFT
 // ================================================================
 var c = null;
 var curView = null;
@@ -45,9 +43,9 @@ function showTable() {
   	table.cellPadding = 0;
   	table.align = 'center';
   	
-  	for(i=0; i < w; i++) {
+  	for (var i=0; i < w; i++) {
   		var tr = table.insertRow(i);
-    	for(var j = 0; j < h; j++) {
+    	for (var j = 0; j < h; j++) {
     		var td = tr.insertCell(j);
     		td.className = 'schar';
     		
