@@ -1,6 +1,9 @@
 <?
 include_once("./_common.php");
 
+set_session('ss_bo_table', $_REQUEST['bo_table']);
+set_session('ss_wr_id', $_REQUEST['wr_id']);
+
 // 090713
 if (!$board[bo_table])
 {
