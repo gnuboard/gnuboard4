@@ -21,7 +21,7 @@ for ($i=0; $row=sql_fetch_array($result); $i++) {
     echo latest("basic", $row['bo_table'], 10, 70);
     echo "<p>\n";
 }
-?>
+?>1
 </td></tr></table>
 <!-- 메인화면 최신글 끝 -->
 
